@@ -12,7 +12,7 @@ jobs:
     environment: bounty-review-fc5e
     steps:
       - name: Record harmless approval result
-        run: echo approved-by-configured-reviewer > gate-result.txt
+        run: echo approved-after-second-reviewer > gate-result.txt
       - uses: actions/upload-artifact@v4
         with:
           name: environment-gate-result
