@@ -1,0 +1,18 @@
+name: fork-trust-marker
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+jobs:
+  trust:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check whether repo secret reaches this run
+        env:
+          TEST_CI_MARKER: ${{ secrets.TEST_CI_MARKER }}
+        run: |
+          if [ -n "$TEST_CI_MARKER" ]; then echo secret-present > trust-result.txt; else echo secret-absent > trust-result.txt; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: fork-trust-result
+          path: trust-result.txt
