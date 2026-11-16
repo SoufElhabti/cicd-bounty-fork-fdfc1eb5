@@ -1,0 +1,20 @@
+name: OIDC fork control
+on:
+  pull_request:
+    paths:
+      - oidc-fork-control.txt
+permissions:
+  contents: read
+  id-token: write
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Check OIDC endpoint availability
+        shell: bash
+        run: |
+          if [[ -n "${ACTIONS_ID_TOKEN_REQUEST_URL:-}" && -n "${ACTIONS_ID_TOKEN_REQUEST_TOKEN:-}" ]]; then
+            echo 'OIDC_ENDPOINT=present'
+          else
+            echo 'OIDC_ENDPOINT=absent'
+          fi
