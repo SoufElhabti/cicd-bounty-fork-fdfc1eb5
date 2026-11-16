@@ -1,0 +1,19 @@
+name: environment-review-control
+on:
+  push:
+    paths:
+      - .github/workflows/environment-gate.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  gate:
+    runs-on: ubuntu-latest
+    environment: bounty-review-fc5e
+    steps:
+      - name: Record harmless approval result
+        run: echo approved-by-configured-reviewer > gate-result.txt
+      - uses: actions/upload-artifact@v4
+        with:
+          name: environment-gate-result
+          path: gate-result.txt
