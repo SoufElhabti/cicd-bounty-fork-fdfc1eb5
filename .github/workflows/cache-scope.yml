@@ -1,0 +1,22 @@
+name: cache-scope-control
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  cache:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/cache@v4
+        with:
+          path: cache-marker.txt
+          key: bounty-cache-scope-20261116-fc5ebe65
+      - name: Observe cache, then write fork marker
+        run: |
+          if [ -f cache-marker.txt ]; then printf 'hit:' > cache-result.txt; cat cache-marker.txt >> cache-result.txt; else printf 'miss\n' > cache-result.txt; fi
+          if [ "${{ github.event_name }}" = "pull_request" ]; then printf 'from-fork-pr\n' > cache-marker.txt; fi
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cache-scope-result
+          path: cache-result.txt
